@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class RangedEnemy : BaseEnemy
 {
-    private GameObject projectilePrefab;  // Projectile prefab
+    [SerializeField] private GameObject projectilePrefab;  // Projectile prefab
     [SerializeField] private Transform firePoint;  // Fire point where projectiles will be launched
     [SerializeField] private float attackRate = 1f;  // Time between attacks
     [SerializeField] private float projectileSpeed = 10f;  // Speed of the projectile
@@ -19,9 +19,27 @@ public class RangedEnemy : BaseEnemy
     {
         base.Update();  // Call base Update for any generic behavior
 
-        // Check if the player is in attack range and if enough time has passed to shoot
+        // Calculate distance to player
         float distanceToPlayer = Vector3.Distance(transform.position, playerTransform.position);
-        if (distanceToPlayer <= enemyData.attackRange && Time.time - lastAttackTime >= attackRate)
+
+        // If within attack range, stop moving and attack
+        if (distanceToPlayer <= attackRange)
+        {
+            // Stop moving and start attacking
+            StopMovingAndAttack();
+        }
+        else
+        {
+            // Move towards the player if out of attack range
+            MoveTowardsPlayer();
+        }
+    }
+
+    // Stop moving and shoot the projectile
+    private void StopMovingAndAttack()
+    {
+        // Check if enough time has passed to shoot
+        if (Time.time - lastAttackTime >= attackRate)
         {
             ShootProjectile();
         }
@@ -33,8 +51,25 @@ public class RangedEnemy : BaseEnemy
         // Instantiate the projectile at the fire point and set its direction
         GameObject projectile = Instantiate(projectilePrefab, firePoint.position, firePoint.rotation);
         Rigidbody rb = projectile.GetComponent<Rigidbody>();
-        rb.velocity = (playerTransform.position - transform.position).normalized * projectileSpeed;
+
+        if (rb != null)
+        {
+            rb.velocity = (playerTransform.position - transform.position).normalized * projectileSpeed;
+        }
+
+        // Add damage logic directly to the projectile (we'll check for collision and apply damage in the projectile's behavior)
+        projectile.GetComponent<Projectile>().damage = attackDamage;
 
         lastAttackTime = Time.time;  // Update the last attack time
+    }
+
+    // Override MoveTowardsPlayer in RangedEnemy to ensure proper movement towards the player
+    protected override void MoveTowardsPlayer()
+    {
+        if (health > 0)
+        {
+            Vector3 direction = (playerTransform.position - transform.position).normalized;
+            transform.Translate(direction * speed * Time.deltaTime, Space.World);
+        }
     }
 }

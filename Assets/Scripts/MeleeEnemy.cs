@@ -2,24 +2,19 @@ using UnityEngine;
 
 public class MeleeEnemy : BaseEnemy
 {
-    public EnemyData enemyData;  // Reference to the ScriptableObject
-
     private bool isAttacking = false;
 
     protected override void Start()
     {
-        base.Start();
+        base.Start();  // Initialize the base enemy
 
-        // Initialize from ScriptableObject
-        health = enemyData.health;
-        speed = enemyData.speed;
-        scoreValue = enemyData.scoreValue;
-        attackRange = enemyData.attackRange;
-        attackDamage = enemyData.attackDamage;
+        // Initialize melee-specific values (if needed)
     }
 
-    protected void Update()
+    protected override void Update()
     {
+        base.Update();  // Ensure common logic from BaseEnemy is called
+
         if (health <= 0) return;
 
         // Move towards the player
@@ -32,20 +27,13 @@ public class MeleeEnemy : BaseEnemy
         }
     }
 
-    private void MoveTowardsPlayer()
-    {
-        // Move enemy toward player
-        Vector3 direction = (playerTransform.position - transform.position).normalized;
-        transform.Translate(direction * speed * Time.deltaTime, Space.World);
-    }
-
     private void AttackPlayer()
     {
         isAttacking = true;
         // Trigger melee attack (e.g., animation or damage)
         Debug.Log($"{enemyData.enemyName} attacks the player!");
         // Apply damage to the player
-        playerTransform.GetComponent<PlayerHealth>().TakeDamage(attackDamage);
+        playerTransform.GetComponent<PlayerHealth>().TakeDamage(enemyData.attackDamage);
         isAttacking = false;
     }
 }
