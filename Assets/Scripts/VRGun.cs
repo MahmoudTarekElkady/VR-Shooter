@@ -1,74 +1,42 @@
 using UnityEngine;
-using UnityEngine.XR.Interaction.Toolkit;
-using UnityEngine.XR.Interaction.Toolkit.Interactables;
-using UnityEngine.XR.Interaction.Toolkit.Interactors;
+using UnityEngine.InputSystem;
 
 public class VRGun : MonoBehaviour
 {
-    [SerializeField] private GameObject bulletPrefab;
-    [SerializeField] private Transform firePoint;
-    [SerializeField] private float bulletSpeed = 20f;
+    [SerializeField] private GameObject bulletPrefab; // Bullet prefab to instantiate
+    [SerializeField] private Transform firePoint; // Fire point of the gun
+    [SerializeField] private float bulletSpeed = 20f; // Speed of the bullet
+    [SerializeField] private InputActionReference shootAction; // VR controller trigger action
 
-    private XRBaseInteractor currentInteractor; // Stores the interactor grabbing the gun
-    private bool isLeftHand; // Tracks whether the left hand is grabbing the gun
-
-    private void Awake()
+    private void OnEnable()
     {
-        // Attach event handlers
-        var grabInteractable = GetComponent<XRGrabInteractable>();
-        grabInteractable.selectEntered.AddListener(OnGrab);
-        grabInteractable.selectExited.AddListener(OnRelease);
+        shootAction.action.performed += OnShoot;
     }
 
-    private void OnDestroy()
+    private void OnDisable()
     {
-        // Detach event handlers to avoid memory leaks
-        var grabInteractable = GetComponent<XRGrabInteractable>();
-        grabInteractable.selectEntered.RemoveListener(OnGrab);
-        grabInteractable.selectExited.RemoveListener(OnRelease);
+        shootAction.action.performed -= OnShoot;
     }
 
-    private void OnGrab(SelectEnterEventArgs args)
+    private void OnShoot(InputAction.CallbackContext context)
     {
-        // Get the interactor (hand/controller) grabbing the gun
-        currentInteractor = (XRBaseInteractor)args.interactorObject;
-
-        // Check if it's the left or right hand based on the controller's name or properties
-        if (currentInteractor.transform.name.ToLower().Contains("left"))
-        {
-            isLeftHand = true;
-            Debug.Log("Gun grabbed with left hand.");
-        }
-        else if (currentInteractor.transform.name.ToLower().Contains("right"))
-        {
-            isLeftHand = false;
-            Debug.Log("Gun grabbed with right hand.");
-        }
+        Shoot();
     }
 
-    private void OnRelease(SelectExitEventArgs args)
+    private void Shoot()
     {
-        // Reset the interactor when the gun is released
-        if (args.interactorObject == currentInteractor)
+        if (bulletPrefab == null || firePoint == null)
         {
-            currentInteractor = null;
-            Debug.Log("Gun released.");
-        }
-    }
-
-    public void Shoot()
-    {
-        if (currentInteractor == null)
-        {
-            Debug.LogWarning("No hand is grabbing the gun. Cannot shoot!");
+            Debug.LogWarning("Bullet prefab or fire point not assigned!");
             return;
         }
 
-        // Instantiate and shoot the bullet
+        // Instantiate and fire the bullet
         GameObject bullet = Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);
         Rigidbody rb = bullet.GetComponent<Rigidbody>();
-        rb.linearVelocity = firePoint.forward * bulletSpeed;
+        rb.velocity = firePoint.forward * bulletSpeed;
 
-        Debug.Log(isLeftHand ? "Shooting with left hand!" : "Shooting with right hand!");
+        // Debug or add effects
+        Debug.Log("Bullet fired!");
     }
 }
