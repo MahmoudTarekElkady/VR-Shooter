@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class RangedEnemy : BaseEnemy
 {
-    [SerializeField] private GameObject projectilePrefab;  // Projectile prefab
+    private GameObject projectilePrefab;  // Projectile prefab
     [SerializeField] private Transform firePoint;  // Fire point where projectiles will be launched
     [SerializeField] private float attackRate = 1f;  // Time between attacks
     [SerializeField] private float projectileSpeed = 10f;  // Speed of the projectile
