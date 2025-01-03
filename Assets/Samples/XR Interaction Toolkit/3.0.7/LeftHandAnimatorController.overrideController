@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!221 &22100000
+AnimatorOverrideController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: LeftHandAnimatorController
+  m_Controller: {fileID: 9100000, guid: 7d1cc62b0fee0844aaeb323f5efe6f3a, type: 2}
+  m_Clips:
+  - m_OriginalClip: {fileID: 7400000, guid: 5b3832b1620df71488c985cdf9a5bbf4, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: 2e21bb4f4f9620e489747fc0ebde7f76, type: 2}
+  - m_OriginalClip: {fileID: 7400000, guid: 2450401cec63f58418235d9249c6c7a9, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: e97a5f2d5d4eb9d4d8829e238cb02407, type: 2}
+  - m_OriginalClip: {fileID: 7400000, guid: 752377687e9b8a4419b46cb8e2bda49b, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: 81a394a115a210d46b8869f2be78ae1e, type: 2}
