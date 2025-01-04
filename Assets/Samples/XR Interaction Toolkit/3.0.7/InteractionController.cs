@@ -3,14 +3,16 @@ using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit.Interactors;
 using UnityEngine.XR.Interaction.Toolkit.Locomotion.Teleportation;
 using UnityEngine.XR.Interaction.Toolkit.Locomotion.Turning;
+using UnityEngine.XR.Interaction.Toolkit.Samples.StarterAssets;
 
 public class InteractionController : MonoBehaviour
 {
     [SerializeField] private bool useTeleport = false;
     //[SerializeField] private bool useGrabbing = false;
     [SerializeField] private bool useRotation = false;
+    [SerializeField] private bool useMovements;
 
-    //public DynamicMoveProvider movementScript;
+    public DynamicMoveProvider movementScript;
     public SnapTurnProvider rotationScript;
     public TeleportationProvider teleportationScript;
 
@@ -18,13 +20,15 @@ public class InteractionController : MonoBehaviour
     [SerializeField] public GameObject teleportIndicator;
 
     private GameObject xrOrigin;
+
+
     private void Awake()
     {
         if (teleportationScript == null)
             teleportationScript = FindObjectOfType<TeleportationProvider>();
 
-        //if (movementScript == null)
-        //    movementScript = FindObjectOfType<DynamicMoveProvider>();
+        if (movementScript == null)
+           movementScript = FindObjectOfType<DynamicMoveProvider>();
 
         if (rotationScript == null)
             rotationScript = FindObjectOfType<SnapTurnProvider>();
@@ -87,14 +91,14 @@ public class InteractionController : MonoBehaviour
         }
     }
 
-    //private void SetupMovement()
-    //{
-    //    if (movementScript != null)
-    //    {
-    //        movementScript.enabled = useMovements;
-    //        movementScript.gameObject.SetActive(useMovements);
-    //    }
-    //}
+    private void SetupMovement()
+    {
+        if (movementScript != null)
+        {
+            movementScript.enabled = useMovements;
+            movementScript.gameObject.SetActive(useMovements);
+        }
+    }
 
     private void SetupRotation()
     {
@@ -130,11 +134,11 @@ public class InteractionController : MonoBehaviour
         SetupTeleport();
     }
 
-    //public void SetMovement(bool value)
-    //{
-    //    useMovements = value;
-    //    SetupMovement();
-    //}
+    public void SetMovement(bool value)
+    {
+        useMovements = value;
+        SetupMovement();
+    }
 
     public void SetRotation(bool value)
     {

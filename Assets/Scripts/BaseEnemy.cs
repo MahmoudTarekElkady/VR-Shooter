@@ -31,11 +31,10 @@ public class BaseEnemy : MonoBehaviour
     // Move towards the player if in range
     protected virtual void MoveTowardsPlayer()
     {
-        float distanceToPlayer = Vector3.Distance(transform.position, playerTransform.position);
-        if ( distanceToPlayer <= attackRange && health > 0)
+        if (playerTransform != null)
         {
             Vector3 direction = (playerTransform.position - transform.position).normalized;
-            transform.Translate(direction * speed * Time.deltaTime, Space.World);
+            transform.position += direction * speed * Time.deltaTime;
         }
     }
 
@@ -66,8 +65,8 @@ public class BaseEnemy : MonoBehaviour
     // Handle enemy death
     protected void Die()
     {
-        // Optional: Add death animations, sound, or effects
-        GameManager.Instance.AddScore(scoreValue);
-        Destroy(gameObject);
+        GameManager.Instance.AddScore(scoreValue); // Add score to the GameManager
+        Destroy(gameObject); // Destroy the enemy
     }
+
 }
