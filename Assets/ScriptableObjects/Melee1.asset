@@ -18,5 +18,5 @@ MonoBehaviour:
   scoreValue: 10
   attackRange: 0.5
   attackDamage: 10
-  projectilePrefab: {fileID: 0}
+  enemyPrefab: {fileID: 2337676776242487266, guid: 67078ed1c6b85c443a065c8118cc95fe, type: 3}
   fireRate: 3

@@ -9,6 +9,7 @@ public class EnemyData : ScriptableObject
     public int scoreValue;
     public float attackRange;
     public float attackDamage;
-    public GameObject projectilePrefab;  // For ranged enemies, if needed
-    public float fireRate;  // For ranged enemies, if needed
+    public GameObject enemyPrefab;  
+    public float fireRate;
+    public GameObject projectilePrefab;
 }
